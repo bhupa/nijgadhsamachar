@@ -11,11 +11,17 @@
 |
 */
 
-Route::get('/', function () {
+Route::get('index/', function () {
     return view('welcome');
-});
+    });
+
+
 
 /*
+/*
+
+
+
 |--------------------------------------------------------------------------
 | Application Routes
 |--------------------------------------------------------------------------
@@ -27,5 +33,16 @@ Route::get('/', function () {
 */
 
 Route::group(['middleware' => ['web']], function () {
-    //
+
+
+Route::get('user/index', 'Auth\AuthController@getLogin');
+Route::post('auth/login', 'Auth\AuthController@postLogin');
+Route::get('User/index','UserController@index');
+
+Route::group( ['middleware'=> 'auth'] , function(){
+		
+Route::get('User/adduser','UserController@adduser');
+Route::post('User/storeuser','UserController@storeuser');
+});
+    Route::get('auth/logout', 'Auth\AuthController@getLogout');
 });
