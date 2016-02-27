@@ -22,10 +22,7 @@ class CategoryController extends Controller
    {
         $category = category::all();
 		return view('category/home')->with('category',$category);
-		echo Response::json($channels);
-
-
-     return view('category/home');
+	
 
    }
    public function checkAjax( $data, $message)

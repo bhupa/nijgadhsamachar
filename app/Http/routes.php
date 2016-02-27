@@ -45,7 +45,7 @@ Route::group(['middleware' => ['web']], function () {
 		         Route::get('User/viewprofile/{User}','UserController@viewprofile');
 		         Route::get('User/editprofile/{User}','UserController@editprofile');
 		         Route::post('User/storeprofile/{User}','UserController@storeprofile');
-		         Route::post('News/addnews/','UserController@addnews');
+		         Route::get('User/addnews/','NewsController@addnews');
    				 Route::get('auth/logout', 'Auth\AuthController@getLogout');
 				Route::group(['prefix'=>'admin', 'middleware'=>'isAdmin'], function(){
 					Route::get('viewuser/{User}','AdminController@viewuser');
@@ -53,8 +53,11 @@ Route::group(['middleware' => ['web']], function () {
 					Route::get('editreporter/{User}','AdminController@editreporter');
 					Route::post('storereporter/{User}','AdminController@storereporter');
 					Route::get('deleteuser/{User}','AdminController@deleteuser');
-					Route::get('addcategory/{User}','CategoryController@addcategory');
-					Route::post('create_category/{User}','CategoryController@create_category');
+					Route::get('addcategory/','CategoryController@addcategory');
+					Route::post('create_category/','CategoryController@create_category');
+					Route::get('editcategory/{Category}','CategoryController@editcategory');
+					Route::post('update_category/{Category}','CategoryController@update_category');
+					Route::get('deletcategory/{Category}','CategoryController@deletcategory');
 
 					
 		        });
@@ -70,8 +73,8 @@ throw new App\Exceptions\DataNotFoundException;
 });
 
 Route::bind('Category',function($id){
-if($user = App\category::find($id)){
-return $user;
+if($category = App\category::find($id)){
+return $category;
 }
 throw new App\Exceptions\DataNotFoundException;
 });
