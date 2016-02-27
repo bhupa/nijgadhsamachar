@@ -7,7 +7,7 @@
         </div>
         @endif
         
-              <form method="POST" id="category" action="{{ URL::to('admin/create_category/'.Auth::user()->user_id) }}" enctype="multipart/form-data">
+              <form method="POST" id="category" action="{{ URL::to('admin/create_category') }}" enctype="multipart/form-data">
               <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
                         <div class="form-group">
                           <label for="Category">News Category</label>
@@ -42,10 +42,10 @@
         <td>{{$row->created_at}}</td>
         <td>{{$row->updated_at}}</td>
         <td >
-          <a class=" editcategory btn btn-primary" data-id="{{ $row->category_id }}"  href="{{url('/News_Category/editcategory/'.$row->category_id)}}" role="button">Edit</a>
+          <a class=" editcategory btn btn-primary" data-id="{{ $row->category_id }}"  href="{{url('/admin/editcategory/'.$row->category_id)}}" role="button">Edit</a>
         </td>
         <td >
-          <a class=" deletecategory btn btn-primary" data-id="{{ $row->category_id }}"  href="{{url('/News_Category/deletcategory/'.$row->category_id)}}" role="button">Delete</a>
+          <a class=" deletecategory btn btn-primary" data-id="{{ $row->category_id }}"  href="{{url('/admin/deletcategory/'.$row->category_id)}}" role="button">Delete</a>
         </td>
 
 
@@ -177,12 +177,26 @@
                         var id = form.attr('data-category-id')
                        var tr =  $('td[data-category-id="'+id+'"]').parent('tr');
                       tr.find('.category-name').text(res.category_name)
+                      
+                       setTimeout(function(){
+                          notifier.successNotify(res)
+                      },500);
+
+
                     }
                     else
                     {
                       alert('error');
                     }
-                  } 
+                  },
+                  error:function(res)
+                  {
+                     $('#'+form.attr('modal-id')).modal('hide');
+                      
+                      setTimeout(function(){
+                        notifier.errorNotify(res)
+                      },500);
+                  }
                    });
           
       });
@@ -233,10 +247,10 @@
               <td>'+data.created_at+'</td>\
               <td>'+data.updated_at+'</td>\
               <td >\
-                <a class="edit-btn btn btn-primary" href="{{url('/News_Category/editcategory/')}}'+data.id+ '" role="button">Edit</a>\
+                <a class="edit-btn btn btn-primary" href="{{url('/admin/editcategory/')}}'+data.id+ '" role="button">Edit</a>\
               </td>\
               <td >\
-                <a class="btn btn-primary" href="{{url('/News_Category/deletcategory/')}}'+data.id+ '" role="button">Delete</a>\
+                <a class="btn btn-primary" href="{{url('/admin/deletcategory/')}}'+data.id+ '" role="button">Delete</a>\
               </td>\
             </tr>';
             console.log(view)
@@ -250,7 +264,7 @@
           //update ajax submit
           //update table
 
-            var html = "<form data-category-id='"+id+"' class='edit-category' method='POST' action={{ url('/News_Category/update_category/') }}/"+id+">\
+            var html = "<form data-category-id='"+id+"' class='edit-category' method='POST' action={{ url('/admin/update_category/') }}/"+id+">\
             <input type='hidden' name='_token' id='_token' value='{{ csrf_token() }}'>\
             <div class='form-group'>\
               <input type='text' name='category_name' value='"+value+"'>\
@@ -270,7 +284,7 @@
       }
       
    
-      </script>
+//       </script>
   
 
 

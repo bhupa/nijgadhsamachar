@@ -77,7 +77,8 @@ protected $password = 'password';
     }
     protected function authenticated($user)
     {
-    if (\Auth::user()->by_admin != 1 )
+        
+    if ( (\Auth::user()->by_admin != 1) && (\Auth::user()->status !=="Active") )
       {
           return $this->logout()->withFlashMessage('Register but do not have permission for login');
 

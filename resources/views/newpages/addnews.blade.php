@@ -1,8 +1,9 @@
 @extends('user.master')
 
  @section('content')
+             @include('tinymce::tpl')
   <div id="box">
-      <div class="box-top">Add New User</div>
+      <div class="box-top">Add News</div>
            @if (Session::has('flash_message'))
               <div class="alert alert-danger">
                 {{ Session::get('flash_message') }}
@@ -15,37 +16,17 @@
             <input type="hidden" name="_token" value="{!! csrf_token() !!}">
     
               <div class="form-group">
-              <label for="firstname">First_Name</label>
-              <input name="firstname"class="form-control" type="text" id="firstname">
+              <label for="firstname">Title</label>
+              <input name="title"class="form-control" type="text" id="firstname">
               <div class="error" style="color:red; font-size:15px;">{{ $errors->first('firstname') }}</div>
 
-              <label for="lastname">Last_Name</label>
-              <input name="lastname" class="form-control" id="lastname">
+              <label for="lastname">Category</label>
+              {{ Form::select('category_name', $category->lists("category_name","category_id"),null, array('class'=>'form-control')) }}
               <div class="error" style="color:red; font-size:15px;">{{ $errors->first('lastname') }}</div>
-
-             <label for="select">Gender:</label>
-             <select  name="gender"  class="form-control" id="gender" type="gender" size="1">
-                <option value="" >---Gender-----</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-             </select>
-             <div class="error" style="color:red; font-size:15px;">{{ $errors->first('gender') }}</div>   
-
-              <label for="select">User_Type</label>
-              <select  name="user_type"  class="form-control" id="user_type" type="user_type" size="1"> 
-                  <option value="" >---User_Type-----</option>
-                  <option value="Admin">Admin</option>
-                  <option value="Reporter">Reporter</option>
-              </select>
-              <div class="error" style="color:red; font-size:15px;">{{ $errors->first('user_type') }}</div>
-   
-            <label for="address">Address</label>
-            <input type="text" class="form-control" name="address"  id="address">
-            <div class="error" style="color:red; font-size:15px;">{{ $errors->first('address') }}</div>
-
-            <label for="phone">Phone</label>
-            <input  name="contact" type="number" class="form-control"  id="phone">
-            <div class="error" style="color:red; font-size:15px;">{{ $errors->first('contact') }}</div>
+              <div class="form-group">
+              <label for="Content">Content</label>
+              <textarea id="tinymce" rows="50"></textarea>
+              </div>
 
             <div class="form-group">
               <label for="image">Images</label>
@@ -53,17 +34,6 @@
             <div class="error" style="color:red; font-size:15px;">{{ $errors->first('image') }}</div>
             </div>
 
-            <label for="email">Email address:</label>
-            <input name="email"class="form-control" size="50" id="email">
-            <div class="error" style="color:red; font-size:15px;">{{ $errors->first('email') }}</div>
-
-            <label for="pwd">Password:</label>
-            <input name="password" class="form-control" type="password" id="password">
-            <div class="error" style="color:red; font-size:15px;">{{ $errors->first('password') }}</div>
-
-            <label for="password">confrom_password</label>
-            <input type="password" class="form-control" name="cpassword" id="cpassword">
-            <div class="error" style="color:red; font-size:15px;">{{ $errors->first('cpassword') }}</div></div>
 
             <button type="submit" class="btn btn-default" name="submit_add_user"  value="submit">Submit</button>
     </form>

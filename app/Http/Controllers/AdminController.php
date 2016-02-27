@@ -41,19 +41,7 @@ return view('adminpages/userlist')->withUser($user->all());
 
        $user = User::findOrFail($request->get('user_id'));
 
-        
-
-    	// $user = $request->get('firstname');
-    	// $user = $request->get('lastname');
-    	// $user = $request->get('gender');
-    	// $user = $request->get('user_type');
-    	// $user = $request->get('status');
-    	// $user = $request->get('address');
-    	// $user = $request->get('email');
-    	// $user = $request->get('by_admin');
-    	// $user = $request->get('lastname');
-    	// $user = $request->get('contact');   	
- 
+        $user->firstname = $request->get('firstname');
     	
 		if($request->file('image'))
 		{

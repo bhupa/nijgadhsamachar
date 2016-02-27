@@ -24,7 +24,7 @@ class CategoryRequest extends Request
     public function rules()
     {
         return [
-            'category_name' => 'required|alpha|min:3|unique:Category',
+            'category_name' => 'required_without:category_id|alpha|min:3|unique:Category',
             
         ];
     }

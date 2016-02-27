@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ce0f06656cc0562c5679bacab87a2d86",
-    "content-hash": "06b2016d0f972573771e593161152262",
+    "hash": "7e8f2aea4eeefbf8b4fb554bd2321f73",
+    "content-hash": "08172b1885c5d24d7e88c4ca98820617",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -275,7 +275,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Intervention/image/zipball/86dfe2f2a95aa9eed58faf1cc1dae6534a6ce931",
+                "url": "https://api.github.com/repos/Intervention/image/zipball/e368d262887dbb2fdfaf710880571ede51e9c0e6",
                 "reference": "86dfe2f2a95aa9eed58faf1cc1dae6534a6ce931",
                 "shasum": ""
             },
@@ -471,6 +471,39 @@
                 "tokenizer"
             ],
             "time": "2015-12-05 17:17:57"
+        },
+        {
+            "name": "ktquez/laravel-tinymce",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ktquez/laravel-tinymce.git",
+                "reference": "65afeb22de3daf0268e02c020311ee32acdb7d89"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ktquez/laravel-tinymce/zipball/65afeb22de3daf0268e02c020311ee32acdb7d89",
+                "reference": "65afeb22de3daf0268e02c020311ee32acdb7d89",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Ktquez\\Tinymce\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Alan Albuquerque: ktquez",
+                    "email": "ktquez@gmail.com"
+                }
+            ],
+            "description": "TinyMCE editor for Laravel and Lumen Framework",
+            "time": "2015-07-04 18:37:27"
         },
         {
             "name": "laravel/framework",

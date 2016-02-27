@@ -17,8 +17,9 @@ class category extends Model
 
     protected $fillable = ['category_name'];
 
-    public function User(){
-    	return $this->hasMany('App\User','category_id','category_id');
+    //creater
+    public function user(){
+    	return $this->belongsTo('App\User','create_by','user_id');
     }
 
     

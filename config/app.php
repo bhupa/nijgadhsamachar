@@ -149,7 +149,8 @@ return [
         Illuminate\View\ViewServiceProvider::class,
        Collective\Html\HtmlServiceProvider::class,
        Intervention\Image\ImageServiceProvider::class,
-       
+       Ktquez\Tinymce\TinymceServiceProvider::class,
+
         /*
          * Application Service Providers...
          */

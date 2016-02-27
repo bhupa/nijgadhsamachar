@@ -51,6 +51,6 @@ class User extends Model implements AuthenticatableContract,
          return $this->user_type ;
     }
      public function catetgory(){
-        return $this->hasMany('App\category','user_id','user_id');
+        return $this->hasMany('App\category','create_by','user_id');
     }
 }

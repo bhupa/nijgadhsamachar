@@ -20,10 +20,11 @@
                             @if(Auth::user()->isAdmin())
                                 <li  ><a href="{{ url('admin/viewuser/'.Auth::user()->user_id) }}"><span class="glyphicon glyphicon-user"></span>View_Reporter</a></li>
                                 <li  ><a href="{{ url('admin/addreporter/'.Auth::user()->user_id) }}"><span class="glyphicon glyphicon-user"></span>Add_Reporter</a></li>
-                                <li  ><a href="{{ url('admin/addcategory/'.Auth::user()->user_id)}}"><span class="glyphicon glyphicon-user"></span>Category</a></li>
+                                <li  ><a href="{{ url('admin/addcategory') }}"><span class="glyphicon glyphicon-user"></span>Category</a></li>
                             @endif
 
                             @if(!Auth::user()->isAdmin())
+                                <li><a href="{{ url('User/addnews') }}">News</a></li>
                                 <li><a href="{{ url('User/viewprofile/'. Auth::user()->user_id) }}">view_Profile</a></li>
                             @endif
                             <li><a href="{{ url('auth/logout') }}">logout</a></li>
