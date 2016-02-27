@@ -10,7 +10,7 @@
               <form method="POST" id="category" action="{{ URL::to('admin/create_category/'.Auth::user()->user_id) }}" enctype="multipart/form-data">
               <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
                         <div class="form-group">
-                          <label for="Category">News Category</label>
+                          <label for="Category">bhupendra</label>
                           <input type="text" class="form-control" name="category_name" id="category_name" placeholder="category_name">
 
 @if ($errors->has())
