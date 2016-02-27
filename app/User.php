@@ -23,7 +23,7 @@ class User extends Model implements AuthenticatableContract,
      *
      * @var array
      */
-    protected $fillable = ['firstname', 'lastname','address','contact', 'email','gender','user_type', 'password','remember_token'];
+    protected $fillable = ['firstname', 'lastname','address','contact', 'email','gender','user_type', 'password','remember_token','by_admin','image'];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -40,7 +40,17 @@ class User extends Model implements AuthenticatableContract,
         return $this->user_type == "Reporter";
     }
 
-    public function news(){
-        return $this->hasMany('App\News','user_id','user_id');
+    // public function news(){
+    //     return $this->hasMany('App\News','user_id','user_id');
+    // }
+
+    public function getImage(){
+        return asset('public/images/'.$this->image);
+    }
+    public function getUser_type(){
+         return $this->user_type ;
+    }
+     public function catetgory(){
+        return $this->hasMany('App\category','user_id','user_id');
     }
 }

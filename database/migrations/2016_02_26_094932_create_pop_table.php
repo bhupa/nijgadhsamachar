@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddUserIdUsres extends Migration
+class CreatePopTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,10 +12,10 @@ class AddUserIdUsres extends Migration
      */
     public function up()
     {
-       Schema::table('users', function($table)
-{
-    $table->increments('user_id');
-});
+        Schema::create('pop', function (Blueprint $table) {
+            $table->increments('id');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -25,6 +25,6 @@ class AddUserIdUsres extends Migration
      */
     public function down()
     {
-        //
+        Schema::drop('pop');
     }
 }

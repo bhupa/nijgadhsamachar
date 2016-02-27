@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Auth;
-
+use \Illuminate\Http\Response;
 use App\Users;
 use Validator;
 use App\Http\Controllers\Controller;
@@ -29,8 +29,12 @@ class AuthController extends Controller
      * @var string
      */
     
-    protected $redirectTo = 'User/adduser';
-   
+protected $redirectTo = 'User/index';
+protected $redirectAfterLogout = 'User/index';
+
+protected $email = 'email';
+protected $password = 'password';
+ protected $redirectPath = 'User/index';
 
     /**
      * Create a new authentication controller instance.
@@ -39,7 +43,7 @@ class AuthController extends Controller
      */
  //     public function __construct()
  //     {
- // $this->middleware('guest', ['except' => 'logout']);
+ // $this->middleware(['guest'], ['except' => 'getlogout']);
  //  }
 
     /**
@@ -71,4 +75,19 @@ class AuthController extends Controller
             'password' => bcrypt($data['password']),
         ]);
     }
+    protected function authenticated($user)
+    {
+    if (\Auth::user()->by_admin != 1 )
+      {
+          return $this->logout()->withFlashMessage('Register but do not have permission for login');
+
+      }
+
+      else
+      {
+        return \Redirect::to('User/index')
+            ->withFlashMessage('login sucesfully');
+
+      }
+     }
 }

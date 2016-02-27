@@ -45,6 +45,10 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
+        if($e instanceOf DataNotFoundException){
+            echo view('errors.404')->render();
+            die();
+        }
         return parent::render($request, $e);
     }
 }

@@ -2,13 +2,6 @@
 
  @section('content')
   <div id="box">
-  @if (count($errors) > 0)
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    @endif
       <div class="box-top">Add New User</div>
            @if (Session::has('flash_message'))
               <div class="alert alert-danger">
