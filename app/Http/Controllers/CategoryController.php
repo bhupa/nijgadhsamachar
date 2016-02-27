@@ -9,7 +9,10 @@ use App\Http\Requests\CategoryRequest;
 use Input;
 use  Redirect;
 use Session;
+use Requests;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UserFormRequest;
+
 
 
 class CategoryController extends Controller
@@ -25,11 +28,11 @@ class CategoryController extends Controller
      return view('category/home');
 
    }
-   public function checkAjax( $data, $message )
+   public function checkAjax( $data, $message)
  	{
- 		return (Request::ajax() ) ? $data : 
- 			Redirect::to('admin/addcategory')
- 			->withFlashMessage($message);
+ echo json_encode($data); 
+
+	Redirect::to('admin/addcategory')->withFlashMessage($message);
 	}
 
 	public function create_category(CategoryRequest $request)

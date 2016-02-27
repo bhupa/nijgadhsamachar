@@ -23,10 +23,38 @@
                          </div>
                         <button type="submit"name="submit_login"  class="btn btn-info">Submit</button>
             </form>
+ <div id="box">
+      <div class="box-top">Category Table</div>
+      <table class="table table-bordered ">
+            <tr class="active text-primar
+            y" style="background-color:yellow" >
+              <td >ID</td>
+              <td>Category Name</td> 
+              <td>Create Date</td> 
+              <td >Update Date</td>
+            </tr>
+            <tbody class="category-table">
+      @foreach ($category as $row)
+      <tr class="success">
+        
+        <td class="category_id" data-category-id="{{$row->category_id}}">{{$row->category_id}}</td>
+        <td class="category-name">{{$row->category_name}}</td>
+        <td>{{$row->created_at}}</td>
+        <td>{{$row->updated_at}}</td>
+        <td >
+          <a class=" editcategory btn btn-primary" data-id="{{ $row->category_id }}"  href="{{url('/News_Category/editcategory/'.$row->category_id)}}" role="button">Edit</a>
+        </td>
+        <td >
+          <a class=" deletecategory btn btn-primary" data-id="{{ $row->category_id }}"  href="{{url('/News_Category/deletcategory/'.$row->category_id)}}" role="button">Delete</a>
+        </td>
 
 
+      </tr>
+    @endforeach
+    </tbody>
+      </table>
 
-            <script src="{{asset('resources/assets/js/jquery.js')}}"></script> 
+             <script src="{{asset('resources/assets/js/jquery.js')}}"></script> 
       <script src="{{asset('resources/assets/js/jquery.validate.js')}}"></script>
       <script src="{{asset('resources/assets/js/bootstrap.min.js')}}"></script> 
       <script src="{{asset('resources/assets/js/bootstrap.js')}}"></script> 
@@ -36,15 +64,13 @@
     jQuery(document).ready(function(){
 
             $("#category").validate({
-               rules: { category_name:{ required: true,  minlength: 3} },
-               messages: {
-            category_name: {
-                required: "Please enter category name",
-                // alpha: "Name should contain only letters",
-                minlength: "Name should be more than 4 characters",
-            }
-          },
-                
+               rules: { category_name:{ required: true, minlength:4} },
+             
+            messages: {category_name:{
+        required: "Category field is required",
+        minlength: "Atleast 4 character is required for Category ",
+       }
+    },
               submitHandler: function(form,event){  event.preventDefault()}
             });
       $('#category').on('submit',function(){
@@ -52,7 +78,7 @@
                 var d = $(this).data();
                 if(!d.validator.valid()){return false; }
                 var form = $(this);
-                var url  = form.prop('action');     
+                var url  = form.prop('action'); 
             $.ajax({
                   url:url,
                   type:"POST",
@@ -60,25 +86,70 @@
                   data:form.serialize(),
                   success:function(res)
                   {
+                  
                     if (res) 
                     {
           
-                      category.add(res);
-                        $('#'+form.attr('modal-id')).modal('show');
-                     init_modal({
-            title: 'Add Category',
-            body: 'Category Added sucessfully',
-            footer: ''
-            });
+                     
+                        category.add( res );
 
-                    }
+                        $( '#'+form.attr('modal-id') ).modal('hide');
+                      
+                        notifier.successNotify(res)
+
+                  }
                     else
                     {
                       alert('error');
                     }
-                  } 
+                  },
+
+                  error:function(res)
+                  {
+                    
+                      notifier.errorNotify(res)
+                  }
+
                    });
         });
+
+          
+          //notifer all function
+        
+          var notifier = {
+
+            errorNotify : function(res){
+                   var error = res.responseJSON;  
+                   var modalData = {}
+                   modalData.title = "Error !"
+                   modalData.body = "<p style='color:red'>These are the follwing errors: ";
+                  
+                 $.each(error,function(key, value){
+                  
+                  modalData.body += "<p style='text-decoration:underline'>"+key+"</p>";
+                   for(var i = 0; i < value.length; i++ ){
+                      modalData.body +=  ( "<span>" + value[i] + "<span>" );
+                   }
+                 }) 
+
+                   modalData.footer= "Please Make Sure Your input is correct";
+                   init_modal(modalData);
+            },
+
+            successNotify : function(response){
+
+
+                    init_modal({
+                           title: 'Success',
+                            body: 'Your Operation is successfully done',
+                           footer: ''
+                      });
+            }
+
+
+          }
+
+
           $(document).on('submit','.edit-category',function(e){
            e.preventDefault();
            
@@ -201,5 +272,10 @@
    
       </script>
   
+
+
+
+
+   
     
 @stop
