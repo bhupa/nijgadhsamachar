@@ -21,7 +21,9 @@ class CategoryController extends Controller
 
    public function addcategory()
    {
-        $category = category::select("category_id","category_name")->get();
+       
+       
+        $category = category::all();
 		return view('category/home')->with('category',$category);
 		
 

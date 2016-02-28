@@ -21,6 +21,9 @@ class category extends Model
     public function user(){
     	return $this->belongsTo('App\User','create_by','user_id');
     }
+    public function news(){
+        return $this->HasMany('App\news','category_id','category_id');
+    }
 
     
 }

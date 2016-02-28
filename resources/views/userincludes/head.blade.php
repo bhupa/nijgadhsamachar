@@ -25,6 +25,7 @@
 
                             @if(!Auth::user()->isAdmin())
                                 <li><a href="{{ url('User/addnews') }}">News</a></li>
+                                <li><a href="{{ url('User/usernewslist') }}">View_News</a></li>
                                 <li><a href="{{ url('User/viewprofile/'. Auth::user()->user_id) }}">view_Profile</a></li>
                             @endif
                             <li><a href="{{ url('auth/logout') }}">logout</a></li>

@@ -9,25 +9,25 @@
                 {{ Session::get('flash_message') }}
               </div>
             @endif
-        <form method="POST" id="adduser"
-              action="{{ URL::to('User/storeuser') }}" 
+        <form method="POST" id ="addnews"
+              action="{{ URL::to('User/usernews') }}" 
               enctype="multipart/form-data" accept="image/gif,image/jpeg">
            
             <input type="hidden" name="_token" value="{!! csrf_token() !!}">
     
               <div class="form-group">
               <label for="firstname">Title</label>
-              <input name="title"class="form-control" type="text" id="firstname">
-              <div class="error" style="color:red; font-size:15px;">{{ $errors->first('firstname') }}</div>
+              <input name="title"class="form-control" type="text" id ="firstname">
+              <div class="error" style="color:red; font-size:15px;">{{ $errors->first('title') }}</div>
 
               <label for="lastname">Category</label>
-              {{ Form::select('category_name', $category->lists("category_name","category_id"),null, array('class'=>'form-control')) }}
-              <div class="error" style="color:red; font-size:15px;">{{ $errors->first('lastname') }}</div>
+              {{ Form::select('category_type', $category->lists("category_name","category_id"),null, array('class'=>'form-control')) }}
+              <div class="error" style="color:red; font-size:15px;">{{ $errors->first('category_type') }}</div>
               <div class="form-group">
               <label for="Content">Content</label>
-              <textarea id="tinymce" rows="50"></textarea>
+              <textarea id="tinymce" name="body"  rows="50"></textarea>
               </div>
-
+<div class="error" style="color:red; font-size:15px;">{{ $errors->first('body') }}</div>
             <div class="form-group">
               <label for="image">Images</label>
               <input type="file" name="image" id="image"  >
@@ -48,56 +48,91 @@
         jQuery(document).ready(function(){  
         
 
-                      // $("#adduser").validate({
-                      //                rules:
-                      //                {
-                      //                     firstname:{  required: true ,min: 3, alpha: true },
-                      //                     lastname: { required: true ,min: 3, alpha: true },
-                      //                     gender:{ required: true },
-                      //                     user_type:{ required:  true },
-                      //                     address:{ required: true},
-                      //                     contact:{ required: true, number: true},
-                      //                     image:{ required: true },
-                      //                     email:{ required: true, email: true },
-                      //                     password:{ required: true, alpha_num: true, min:6 },
-                      //                     cpassword:{ equalTo: "#password" }
-                      //                },
+                      $("#addnews").validate({
+                                     rules:
+                                     {
+                                          title:{  required: true  },
+                                          body:{ required: true },
+                                          image:{ required: true }
+                                         
+                                     },
                                 
-                      //                submitHandler: function(form,event){  event.preventDefault()}
-                      //   });
+                                     submitHandler: function(form,event){  event.preventDefault()}
+                        });
+                       $('#addnews').on('submit',function(){
+                $this = $(this);
+                var d = $(this).data();
+                if(!d.validator.valid()){return false; }
+                var form = $(this);
+                var url  = form.prop('action'); 
+                 var formData = new FormData($(this)[0]);
+                formData.append('body', tinymce.get('tinymce').getContent())
+                console.log($('#tinymce').val());
+            $.ajax({
+                  url:url,
+                  type:"POST",
+                  dataType: "json",
+                  data:formData,
+                  cache: false,
+                  contentType: false,
+                  processData: false,         
+                  success:function(res)
+                  {
+                  
+                    if (res) 
+                    {
+                      notifier.successNotify(res)
+                       
+                  }
+                    else
+                    {
+                      alert('error');
+                    }
+                  },
+
+                  error:function(res)
+                  {
+                    
+                      notifier.errorNotify(res)
+                  }
+
+                   });
+        });
+
+var notifier = {
+
+            errorNotify : function(res){
+                   var error = res.responseJSON;  
+                   var modalData = {}
+                   modalData.title = "Error !"
+                   modalData.body = "<p style='color:red'>These are the follwing errors: ";
+                  
+                 $.each(error,function(key, value){
+                  
+                  modalData.body += "<p style='text-decoration:underline'>"+key+"</p>";
+                   for(var i = 0; i < value.length; i++ ){
+                      modalData.body +=  ( "<span>" + value[i] + "<span>" );
+                   }
+                 }) 
+
+                   modalData.footer= "Please Make Sure Your input is correct";
+                   init_modal(modalData);
+            },
+
+            successNotify : function(response){
 
 
-// $('#adduser').on('submit',function(e){
-        
-       
-//   $(document).on('submit','#adduser',function(e){
-     
-//       e.preventDefault();
-
-//        var formData = new FormData($(this)[0]);
-
-//         $.ajax({
-//           url:$(this).attr('action'),
-//           type: 'POST',
-//           data: formData,
-//           success: function (data) {
-//               init_modal({
-//                   "title" : "A new user is saved",
-//                   "body" : data.newuser.firstname + " " + data.newuser.lastname + " is the user",
-//                   "footer": ""
-//               })
-
-//               $(this).trigger('reset')
-//           },
-//           cache: false,
-//           contentType: false,
-//           processData: false
-//         });
-
-//         return false;
-//       })
+                    init_modal({
+                           title: 'Success',
+                            body: 'Your Operation is successfully done',
+                           footer: ''
+                      });
+            }
 
 
-// });
+          }
+
+
+});
     </script>
 @stop

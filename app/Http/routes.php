@@ -46,6 +46,14 @@ Route::group(['middleware' => ['web']], function () {
 		         Route::get('User/editprofile/{User}','UserController@editprofile');
 		         Route::post('User/storeprofile/{User}','UserController@storeprofile');
 		         Route::get('User/addnews/','NewsController@addnews');
+		         Route::post('User/usernews/','NewsController@usernews');
+		         Route::get('User/usernewslist/','NewsController@usernewslist');
+		          Route::get('User/editnews/{News}','NewsController@editnews');
+		           Route::post('User/usersavenews/{News}','NewsController@usersavenews');
+		            Route::post('User/deletenews/{News}','NewsController@deletenews');
+
+		         
+		         
    				 Route::get('auth/logout', 'Auth\AuthController@getLogout');
 				Route::group(['prefix'=>'admin', 'middleware'=>'isAdmin'], function(){
 					Route::get('viewuser/{User}','AdminController@viewuser');
@@ -78,6 +86,13 @@ return $category;
 }
 throw new App\Exceptions\DataNotFoundException;
 });
+Route::bind('News',function($id){
+if($news = App\News::find($id)){
+return $news;
+}
+throw new App\Exceptions\DataNotFoundException;
+});
+
 //administration= database
 // system password
 // user_name sys @orcl as sysdba

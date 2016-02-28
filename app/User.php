@@ -40,9 +40,9 @@ class User extends Model implements AuthenticatableContract,
         return $this->user_type == "Reporter";
     }
 
-    // public function news(){
-    //     return $this->hasMany('App\News','user_id','user_id');
-    // }
+    public function news(){
+        return $this->hasMany('App\news','create_by','user_id');
+    }
 
     public function getImage(){
         return asset('public/images/'.$this->image);
