@@ -34,9 +34,11 @@ class NewsController extends Controller
     $category = category::select("category_id","category_name")->get();
 	 return view('newpages/editnews')->with('news',$news)->with('category',$category);	
     }
-    public function deletenews($news)
+    public function deletenews(Request $request, $news)
     {  
-    $user->delete();
+
+    $news->delete();
+    return $this->checkAjax( ['status'=>1],'Successfully delete',$request);
 	  return Redirect::to('User/usernewslist')
  			->withFlashMessage('sucessfully delete');	
     }
@@ -51,7 +53,7 @@ class NewsController extends Controller
     public function usernews(NewsRequest $request)
     {
     	$user =\Auth::user()->user_id;
-    	$input = $request->all();
+    	// $input = $request->all();
         $file = $request->file('image');
         $imageName = $this->saveImage($file);
 		$news = new News;

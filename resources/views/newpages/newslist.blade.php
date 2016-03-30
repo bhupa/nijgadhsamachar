@@ -61,8 +61,8 @@
            
          <tr>
                 <th colspan="1">Action</th>
-                <td><a href="{{ url( 'User/editnews/'. $key->news_id) }}" ><button class="btn btn-xs btn-primary"> Edit </button></a>
-                <a href="{{ url( 'User/deletenews/'. $key->news_id) }}" ><button class="btn btn-xs btn-primary"> Delete </button></a></td>
+                <td ><a href="{{ url( 'User/editnews/'. $key->news_id) }}" ><button class="btn btn-xs btn-primary"> Edit </button></a>
+                <a class="deletenews" data-id="{{ $key->news_id }}" href="{{ url( 'User/deletenews/'. $key->news_id) }}" ><button class="btn btn-xs btn-primary"> Delete </button></a></td>
             </tr>
     
               </table>
@@ -74,9 +74,41 @@
   
     <script type="text/javascript">
     
-        jQuery(document).ready(function(){  
-      
+        jQuery(document).ready(function(){ 
 
-});
+      $(document).on('click','.deletenews', function(e){
+        e.preventDefault();
+       $this = $(this);
+       var form = $(this);
+       var url = $(this).attr('href');
+      var table = $(this).closest('table')
+        $.ajax({
+          url:url,
+          type:'get',
+          datType:"json",
+          success:function(res)
+          {
+              table.fadeOut(400);
+            if(res)
+            {
+            init_modal({
+            title: 'Delete News',
+            body: 'News delete sucessfully',
+            footer: ''
+            });
+            }
+            else
+            {
+              alert('error');
+            }
+          }
+        });
+
+      });
+      });
+
+
+
+
     </script>
     @stop

@@ -20,6 +20,8 @@
                             @if(Auth::user()->isAdmin())
                                 <li  ><a href="{{ url('admin/viewuser/'.Auth::user()->user_id) }}"><span class="glyphicon glyphicon-user"></span>View_Reporter</a></li>
                                 <li  ><a href="{{ url('admin/addreporter/'.Auth::user()->user_id) }}"><span class="glyphicon glyphicon-user"></span>Add_Reporter</a></li>
+                                <li> <a href="{{ url('admin/addnews/') }}"><span class="glyphicon glyphicon-user"></span>Add_News</a></li>
+                                 <li> <a href="{{ url('admin/viewnews/') }}"><span class="glyphicon glyphicon-user"></span>View_News</a></li>
                                 <li  ><a href="{{ url('admin/addcategory') }}"><span class="glyphicon glyphicon-user"></span>Category</a></li>
                             @endif
 

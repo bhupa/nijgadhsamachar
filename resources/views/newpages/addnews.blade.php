@@ -113,7 +113,7 @@ var notifier = {
                    for(var i = 0; i < value.length; i++ ){
                       modalData.body +=  ( "<span>" + value[i] + "<span>" );
                    }
-                 }) 
+                 }); 
 
                    modalData.footer= "Please Make Sure Your input is correct";
                    init_modal(modalData);

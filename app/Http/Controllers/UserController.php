@@ -12,18 +12,31 @@ use App\Http\Requests\CreateUserRequest;
 use App\User;
 
 
+
 class UserController extends Controller
 {
 
     public function index()
 	{
+		if(!\Auth::user())
+		{
 		return view('userpages/home');
+		}
+		else
+		{
+			$user= \Auth::user();
+			return view('userpages/profile')->with('user',$user);
+		}
+	} 
+	public function login()
+	{
+		return view('userpages/login');
 	} 
 	
 	 public function adduser()
 	{
 		
-		return view('userpages/register');
+		return view('userpages/home');
 	} 
 	public function viewprofile($user)
 	{
@@ -34,6 +47,14 @@ class UserController extends Controller
 	{
     return view('userpages/editprofile')->withUser($user);
 	}
+	public function checkAjax($data,$message,$request)
+	{
+		if($request->ajax())
+
+        echo json_encode($data);
+        else
+        return Redirect::to('User/index')->withFlashMessage($message);	
+    }
 	
 	 public function storeuser(CreateUserRequest  $request)
 	{
@@ -42,11 +63,16 @@ class UserController extends Controller
        $imageName = $this->saveImage($file);
        $input['password'] = \Hash::make($input['password']);
 		$nepal = User::create($input);
-		$nepal->remember_token = md5(time());
+		$nepal->remember_token = md5(time() . str_random(4));
 		$nepal->image = $imageName;
 		$nepal->save();
-		return Redirect::to('User/adduser')
- 			->withFlashMessage('sucessfully create');
+		
+		\Mail::send('email.register',['user'=>$nepal],function($m)use($nepal){
+			$m->to($nepal->email);
+			$m->from('infor@email.com');
+		});
+
+		return  $this->checkAjax( $nepal,'Successfully Added',$request);
 	} 
 
 

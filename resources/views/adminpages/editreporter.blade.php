@@ -1,8 +1,16 @@
 
-@extends('user.master')
-@section('content')
-<div id="box">
-      <div class="box-top">Edit_User</div>
+@extends('try.index')
+@section('title')
+userlist
+@stop
+@section ('content')
+ <div class="pageheader">
+      <h2><i class="fa fa-user"></i> Edit User </span></h2>
+      <div class="breadcrumb-wrapper">
+        <span class="label">You are here login:</span>
+      </div>
+    </div>
+@stop
       @if (count($errors) > 0)
         <ul>
             @foreach ($errors->all() as $error)
@@ -10,6 +18,7 @@
             @endforeach
         </ul>
     @endif
+    @section('main')
 
 <form method="POST" id="editprofile" action="{{ url('admin/storereporter/'. Auth::user()->user_id) }}" enctype="multipart/form-data" accept="image/gif,image/jpeg">
 <input type="hidden" name="_token" value="{{ csrf_token() }}">
@@ -57,10 +66,6 @@
   <div class="form-group">
     <label for="phone">Phone</label>
     <input  name="contact" type="tel" class="form-control" value="<?php echo $user->contact; ?>"  id="phone">
-  </div> 
- <div class="form-group">
-    <label for="phone">By_admin</label>
-    <input  name="by_admin" type="tel" class="form-control" value="<?php echo $user->by_admin; ?>"  id="by_admin">
   </div> 
 
   <div class="error" style="color:red; font-size:15px;">{{ $errors->first('by_admin') }}</div>

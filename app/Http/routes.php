@@ -12,9 +12,20 @@
 */
 
 Route::get('index/', function () {
-    return view('welcome');
+	$news = App\News::latest()->with('category')->get();
+	
+	$categoryNews = App\category::has('news')->with(['news'=>function($q){
+		$q->orderBy('created_at','desc');
+	}])->get();
+
+    return view('welcome')->with('latestNews',$news)->with('categoryNews',$categoryNews);
     });
 
+
+Route::get('news/{Category}',function($category){
+	$allNews = $category->news;
+	return view('categorynews.categorywithnews')->with('allNews',$allNews);
+});
 
 
 /*
@@ -34,7 +45,7 @@ Route::get('index/', function () {
 
 Route::group(['middleware' => ['web']], function () {
 
-
+    Route::get('User/login', 'UserController@login');
 	Route::get('user/index', 'Auth\AuthController@getLogin');
 	Route::post('auth/login', 'Auth\AuthController@postLogin');
 	Route::get('User/index','UserController@index');
@@ -48,14 +59,20 @@ Route::group(['middleware' => ['web']], function () {
 		         Route::get('User/addnews/','NewsController@addnews');
 		         Route::post('User/usernews/','NewsController@usernews');
 		         Route::get('User/usernewslist/','NewsController@usernewslist');
-		          Route::get('User/editnews/{News}','NewsController@editnews');
-		           Route::post('User/usersavenews/{News}','NewsController@usersavenews');
-		            Route::post('User/deletenews/{News}','NewsController@deletenews');
-
-		         
-		         
+		         Route::get('User/editnews/{News}','NewsController@editnews');
+		         Route::post('User/usersavenews/{News}','NewsController@usersavenews');
+		         Route::get('User/deletenews/{News}','NewsController@deletenews');
    				 Route::get('auth/logout', 'Auth\AuthController@getLogout');
+
+
+
 				Route::group(['prefix'=>'admin', 'middleware'=>'isAdmin'], function(){
+					Route::get('viewprofile/{User}','AdminController@viewprofile');
+					Route::get('editprofile/{User}','AdminController@editprofile');
+					Route::post('storeprofile/{User}','AdminController@storeprofile');
+					Route::get('ajaxedit/{User}','AdminController@ajaxedit');
+					
+
 					Route::get('viewuser/{User}','AdminController@viewuser');
 					Route::get('approved/{User}','AdminController@approved');
 					Route::get('editreporter/{User}','AdminController@editreporter');
@@ -66,12 +83,27 @@ Route::group(['middleware' => ['web']], function () {
 					Route::get('editcategory/{Category}','CategoryController@editcategory');
 					Route::post('update_category/{Category}','CategoryController@update_category');
 					Route::get('deletcategory/{Category}','CategoryController@deletcategory');
-
+					Route::get('addnews','AdminController@addnews');
+					Route::post('storenews','AdminController@storenews');
+					Route::get('viewnews','AdminController@viewnews');
+					Route::get('editnews', 'AdminController@editnews');
 					
-		        });
+							        });
 	     });
+Route::get('all/news',function(){
+						if( Auth::user() ){
+							$news = Auth::user()->news()->paginate(10);
+							return view('try.news-list')->with('news',$news);
+						}
+						else{
+							echo 'Lp';
+						}
+					});
 
 });
+	
+
+
 
 Route::bind('User',function($id){
 if($user = App\user::find($id)){

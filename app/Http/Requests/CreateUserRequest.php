@@ -28,6 +28,7 @@ class CreateUserRequest extends Request
      */
     public function rules()
     {
+        
         return [
              
         'firstname' => 'required|alpha|min:3',

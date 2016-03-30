@@ -18,17 +18,16 @@ class News extends Model
 
 public function user()
 {
-	return $this->belongsTo('App\User','user_id','create_by');
+	return $this->belongsTo('App\User','create_by','user_id');
 }
 public function editor()
 {
-	return $this->belongsTo('App\User','user_id','edit_by');
+	return $this->belongsTo('App\User','edit_by','user_id');
 }
-
-
     public function getImage(){
         return asset('public/news/'.$this->image);
     }
+
     public function category()
     {
         return $this->belongsTo('App\category','category_type','category_id');

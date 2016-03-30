@@ -51,7 +51,7 @@
                       $("#editnews").validate({
                                      rules:{title:{  required: true } },
                                       messages: {title:{
-                                     required: "Category field is required"}
+                                     required: "News title field is required"}
        }
                                 
                                      submitHandler: function(form,event){  event.preventDefault()}

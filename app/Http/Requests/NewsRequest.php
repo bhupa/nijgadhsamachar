@@ -29,7 +29,7 @@ class NewsRequest extends Request
     {
 
         return [
-           'title' => 'required|unique',
+           'title' => 'required|unique:news,title',
           'image' => 'required',
           'body' => 'required',
          
