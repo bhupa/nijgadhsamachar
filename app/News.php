@@ -25,8 +25,12 @@ public function editor()
 	return $this->belongsTo('App\User','edit_by','user_id');
 }
     public function getImage(){
-        return asset('public/news/'.$this->image);
+        return asset('news/'.$this->image);
     }
+
+		function comments(){
+			return $this->hasMany('App\Comment','news_id','news_id')->orderBy('comment.created_at','desc');
+		}
 
     public function category()
     {

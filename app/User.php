@@ -45,7 +45,7 @@ class User extends Model implements AuthenticatableContract,
     }
 
     public function getImage(){
-        return asset('public/images/'.$this->image);
+        return asset('images/'.$this->image);
     }
     public function getUser_type(){
          return $this->user_type ;

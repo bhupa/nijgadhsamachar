@@ -2,7 +2,7 @@
 
 return [
 
-	'cdn' => config('app.url').'/vendor/js/tinymce/tinymce.min.js',
+	// 'cdn' => asset('vendor/js/tinymce/tinymce.min.js'),
 
 	'params' => [
 		"selector" => "#tinymce",

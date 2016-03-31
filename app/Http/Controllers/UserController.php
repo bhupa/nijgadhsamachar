@@ -27,21 +27,21 @@ class UserController extends Controller
 			$user= \Auth::user();
 			return view('userpages/profile')->with('user',$user);
 		}
-	} 
+	}
 	public function login()
 	{
 		return view('userpages/login');
-	} 
-	
+	}
+
 	 public function adduser()
 	{
-		
+
 		return view('userpages/home');
-	} 
+	}
 	public function viewprofile($user)
 	{
 		return view('userpages/profile')->withUser($user);
-	} 
+	}
 
 	public function editprofile( $user)
 	{
@@ -53,9 +53,9 @@ class UserController extends Controller
 
         echo json_encode($data);
         else
-        return Redirect::to('User/index')->withFlashMessage($message);	
+        return Redirect::to('User/index')->withFlashMessage($message);
     }
-	
+
 	 public function storeuser(CreateUserRequest  $request)
 	{
        $input = $request->all();
@@ -66,18 +66,18 @@ class UserController extends Controller
 		$nepal->remember_token = md5(time() . str_random(4));
 		$nepal->image = $imageName;
 		$nepal->save();
-		
+
 		\Mail::send('email.register',['user'=>$nepal],function($m)use($nepal){
 			$m->to($nepal->email);
 			$m->from('infor@email.com');
 		});
 
 		return  $this->checkAjax( $nepal,'Successfully Added',$request);
-	} 
+	}
 
 
-	public function saveImage($file){	
-	
+	public function saveImage($file){
+
 
 		$destinationPath =  public_path().'\images';
 
@@ -91,7 +91,7 @@ class UserController extends Controller
 
 		return $destinationFilename;
 	}
-	public function storeprofile(CreateUserRequest  $request, $id) 
+	public function storeprofile(CreateUserRequest  $request, $id)
 	{
 
 		$user = \Auth::user();
@@ -103,7 +103,7 @@ class UserController extends Controller
 		}
 
         $user->fill($request->all());
-		
+
 		$user->save();
 
 		return Redirect::to('User/viewprofile/'.$id->user_id)

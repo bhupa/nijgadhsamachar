@@ -11,22 +11,6 @@
 |
 */
 
-Route::get('index/', function () {
-	$news = App\News::latest()->with('category')->get();
-	
-	$categoryNews = App\category::has('news')->with(['news'=>function($q){
-		$q->orderBy('created_at','desc');
-	}])->get();
-
-    return view('welcome')->with('latestNews',$news)->with('categoryNews',$categoryNews);
-    });
-
-
-Route::get('news/{Category}',function($category){
-	$allNews = $category->news;
-	return view('categorynews.categorywithnews')->with('allNews',$allNews);
-});
-
 
 /*
 /*
@@ -45,6 +29,24 @@ Route::get('news/{Category}',function($category){
 
 Route::group(['middleware' => ['web']], function () {
 
+
+	Route::get('/', function () {
+		$news = App\News::latest()->with('category','comments.user')->get();
+
+		$categoryNews = App\category::has('news')->with(['news'=>function($q){
+			$q->orderBy('created_at','desc');
+		}])->get();
+
+		return view('newpages/homepage')->with('latestNews',$news)->with('categoryNews',$categoryNews);
+	});
+
+
+	Route::get('news/{Category}',function($category){
+		$allNews = $category->news;
+		return view('categorynews.categorywithnews')->with('allNews',$allNews);
+	});
+
+
     Route::get('User/login', 'UserController@login');
 	Route::get('user/index', 'Auth\AuthController@getLogin');
 	Route::post('auth/login', 'Auth\AuthController@postLogin');
@@ -52,7 +54,22 @@ Route::group(['middleware' => ['web']], function () {
 	Route::get('User/adduser','UserController@adduser');
 	Route::post('User/storeuser','UserController@storeuser');
 
-	Route::group( ['middleware'=> 'auth'] , function(){	
+	Route::group( ['middleware'=> 'auth'] , function(){
+
+		Route::post('add/comment/{News}',function($news){
+				$comment = new App\Comment;
+				$body = trim(strip_tags(Request::get('comment')));
+				$status = false;
+				if(strlen($body) > 1)
+				{
+						$comment->content = $body;
+						$comment->user_id = Auth::user()->user_id;
+						$comment->news_id = $news->news_id;
+						$status =  $comment->save();
+				}
+
+				return ['status'=>$status];
+		});
 		         Route::get('User/viewprofile/{User}','UserController@viewprofile');
 		         Route::get('User/editprofile/{User}','UserController@editprofile');
 		         Route::post('User/storeprofile/{User}','UserController@storeprofile');
@@ -71,7 +88,7 @@ Route::group(['middleware' => ['web']], function () {
 					Route::get('editprofile/{User}','AdminController@editprofile');
 					Route::post('storeprofile/{User}','AdminController@storeprofile');
 					Route::get('ajaxedit/{User}','AdminController@ajaxedit');
-					
+
 
 					Route::get('viewuser/{User}','AdminController@viewuser');
 					Route::get('approved/{User}','AdminController@approved');
@@ -87,7 +104,7 @@ Route::group(['middleware' => ['web']], function () {
 					Route::post('storenews','AdminController@storenews');
 					Route::get('viewnews','AdminController@viewnews');
 					Route::get('editnews', 'AdminController@editnews');
-					
+
 							        });
 	     });
 Route::get('all/news',function(){
@@ -101,7 +118,7 @@ Route::get('all/news',function(){
 					});
 
 });
-	
+
 
 
 

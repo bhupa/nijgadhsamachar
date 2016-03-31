@@ -9,8 +9,8 @@
 
   <title>@yield('title','userindex')</title>
 
-  <link href="{{asset('public/asset/css/style.default.css')}}" rel="stylesheet">
-  <link href="{{asset('public/asset/css/jquery.datatables.css')}}" rel="stylesheet">
+  <link href="{{asset('asset/css/style.default.css')}}" rel="stylesheet">
+  <link href="{{asset('asset/css/jquery.datatables.css')}}" rel="stylesheet">
 
   <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!--[if lt IE 9]>
@@ -27,37 +27,37 @@
 </div>
 
 <section>
-  
+
   <div class="leftpanel">
-    
+
     <div class="logopanel">
         <h1><span> Nijgdh samachar </span></h1>
     </div><!-- logopanel -->
-        
-    <div class="leftpanelinner">    
-        
+
+    <div class="leftpanelinner">
+
         <!-- This is only visible to small devices -->
 
-      
-      
+
+
       <ul class="nav nav-pills nav-stacked nav-bracket">
         <li class="active"><a href="index.html"><i class="fa fa-home"></i> <span>Dashboard</span></a></li></br>
          @if(!Auth::user())
 
                          <div class="image">
-                             <img src="{{asset('resources/assets/images/default.png')}}" class="img-circle">
+                             <img src="{{asset('images/default.png')}}" class="img-circle">
                           <div id="imagename"><p align="center"><strong>User_Type</strong></p></div>
                          </div>
                            <li class=""><a href="{{ url('User/index') }}"> Home</a></li>
                            <li  ><a href="{{ url('User/adduser') }}"><span class="glyphicon glyphicon-user"></span> Add_User</a></li>
                           @endif
-                            
+
                          @if(Auth::user())
-                         
+
                             @if(Auth::user()->isAdmin())
                             <div class="nav-parent">
           <img src="{{ Auth::user()->getImage() }}" class="thumbnail img-responsive"  />
-          
+
           </div>
                         <li class="nav-parent"><a href="#"><i class="fa fa-edit"></i> <span>Reporter</span></a>
                         <ul class="children">
@@ -92,32 +92,32 @@
                                 </ul>
                                 <li><a href="{{ url('User/viewprofile/'. Auth::user()->user_id) }}">view_Profile</a></li>
                             @endif
-                            
+
                              <li><a href="{{ url('auth/logout') }}"><i class="glyphicon glyphicon-log-out"></i> Logout</a></li>
                              </ul>
                       @endif
-              
-        
-      
+
+
+
     </div><!-- leftpanelinner -->
   </div><!-- leftpanel -->
-  
+
 
   <div class="mainpanel">
-    
+
     <div class="headerbar">
-      
+
       <a class="menutoggle"><i class="fa fa-bars"></i></a>
-      
+
       <form class="searchform" action="http://themepixels.com/demo/webpage/bracket/index.html" method="post">
         <input type="text" class="form-control" name="keyword" placeholder="Search here..." />
       </form>
-      
+
       <div class="header-right">
         <ul class="headermenu">
-        
-           
-          
+
+
+
           <li>
             <div class="btn-group">
               <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
@@ -131,12 +131,12 @@
                @if(Auth::user())
               @if(Auth::user()->isAdmin())
             <li><a href="{{ url('admin/viewprofile/'. Auth::user()->user_id) }}">view_Profile</a></li>
-              
+
               @endif
                @if(!\Auth::user()->isAdmin())
-            
+
                <li><a href="{{ url('User/viewprofile/'. Auth::user()->user_id) }}">view_Profile</a></li>
-              
+
               @endif
 
               <li><a href="{{ url('auth/logout') }}"><i class="glyphicon glyphicon-log-out"></i>logout</a></li>
@@ -144,44 +144,44 @@
               </ul>
             </div>
           </li>
-          
+
         </ul>
       </div><!-- header-right -->
-      
+
     </div><!-- headerbar -->
      <div class="contentpanel">
     @yield ('content')
     @yield('main')
   </div>
-    
+
     </div>
-    
-       
-  
-  
+
+
+
+
 </section>
 <div class="modal-container"></div>
 
-<script src="{{asset('public/asset/js/jquery-1.10.2.min.js')}}"></script>
-<script src="{{asset('public/asset/js/jquery-migrate-1.2.1.min.js')}}"></script>
-<script src="{{asset('public/asset/js/bootstrap.min.js')}}"></script>
-<script src="{{asset('public/asset/js/modernizr.min.js')}}"></script>
-<script src="{{asset('public/asset/js/jquery.sparkline.min.js')}}"></script>
-<script src="{{asset('public/asset/js/toggles.min.js')}}"></script>
-<script src="{{asset('public/asset/js/retina.min.js')}}"></script>
-<script src="{{asset('public/asset/js/jquery.cookies.js')}}"></script>
+<script src="{{asset('asset/js/jquery-1.10.2.min.js')}}"></script>
+<script src="{{asset('asset/js/jquery-migrate-1.2.1.min.js')}}"></script>
+<script src="{{asset('asset/js/bootstrap.min.js')}}"></script>
+<script src="{{asset('asset/js/modernizr.min.js')}}"></script>
+<script src="{{asset('asset/js/jquery.sparkline.min.js')}}"></script>
+<script src="{{asset('asset/js/toggles.min.js')}}"></script>
+<script src="{{asset('asset/js/retina.min.js')}}"></script>
+<script src="{{asset('asset/js/jquery.cookies.js')}}"></script>
 
-{{-- <script src="{{asset('public/asset/js/flot/flot.min.js')}}"></script> --}}
-{{-- <script src="{{asset('public/asset/js/flot/flot.resize.min.js')}}"></script> --}}
-<script src="{{asset('public/asset/js/morris.min.js')}}"></script>
-<script src="{{asset('public/asset/js/raphael-2.1.0.min.js')}}"></script>
+{{-- <script src="{{asset('asset/js/flot/flot.min.js')}}"></script> --}}
+{{-- <script src="{{asset('asset/js/flot/flot.resize.min.js')}}"></script> --}}
+<script src="{{asset('asset/js/morris.min.js')}}"></script>
+<script src="{{asset('asset/js/raphael-2.1.0.min.js')}}"></script>
 
-<script src="{{asset('public/asset/js/jquery.datatables.min.js')}}"></script>
-<script src="{{asset('public/asset/js/chosen.jquery.min.js')}}"></script>
+<script src="{{asset('asset/js/jquery.datatables.min.js')}}"></script>
+<script src="{{asset('asset/js/chosen.jquery.min.js')}}"></script>
 
-<script src="{{asset('public/asset/js/custom.js')}}"></script>
-<script src="{{asset('public/asset/js/jquery.validate.min.js')}}"></script>
-{{-- <script src="{{asset('public/asset/js/dashboard.js')}}"></script> --}}
+<script src="{{asset('asset/js/custom.js')}}"></script>
+<script src="{{asset('asset/js/jquery.validate.min.js')}}"></script>
+{{-- <script src="{{asset('asset/js/dashboard.js')}}"></script> --}}
 @yield('script')
 </body>
 </html>
