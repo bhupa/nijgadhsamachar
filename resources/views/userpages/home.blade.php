@@ -98,6 +98,7 @@ UserSignIn
                   <option value="" >---User_Type-----</option>
                   <option value="Admin">Admin</option>
                   <option value="Reporter">Reporter</option>
+                  <option value="End User">End User</option>
               </select>
               <div class="error" style="color:red; font-size:15px;">{{ $errors->first('user_type') }}</div>
    
@@ -179,7 +180,6 @@ UserSignIn
      <script type="text/javascript">
         $(document).ready(function(){  
         
-console.log('Ok')
                       $("#adduser").validate({
                                      rules:
                                      {

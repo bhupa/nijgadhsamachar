@@ -39,6 +39,9 @@ class User extends Model implements AuthenticatableContract,
     public function isRepoter(){
         return $this->user_type == "Reporter";
     }
+     public function isEndUser(){
+        return $this->user_type == "End User";
+    }
 
     public function news(){
         return $this->hasMany('App\news','create_by','user_id');
@@ -50,7 +53,11 @@ class User extends Model implements AuthenticatableContract,
     public function getUser_type(){
          return $this->user_type ;
     }
-     public function catetgory(){
-        return $this->hasMany('App\category','create_by','user_id');
+     public function categories(){
+        return $this->belongsToMany('App\category','user_category','user_id','category_id');
+    }
+
+    public function isAssignedCat($category){
+      return in_array($category->category_id,$this->categories->lists('category_id')->toArray());
     }
 }

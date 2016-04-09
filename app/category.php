@@ -21,10 +21,15 @@ class category extends Model
     	return $this->belongsTo('App\User','create_by','user_id');
     }
 
+    public function assignedUsers()
+    {
+        return $this->belongsToMany('App\User','user_category','category_id','user_id');
+    }
+
     public function news(){
 
         return $this->hasMany('App\News','category_type','category_id');
     }
 
-    
+
 }

@@ -37,8 +37,8 @@ class CreateUserRequest extends Request
          'address' => 'required',
         'contact' => 'required|numeric|min:8',
         'image' => 'required_without:user_id',
-        'email' => 'required_without:user_id|email|unique:users,user_id',
-        'user_type'=>'required_without:user_id|in:Admin,Reporter',
+        'email' => 'required_without:user_id|email|unique:users',
+        'user_type'=>'required_without:user_id|in:Admin,Reporter,End User',
         'password' => 'required_without:user_id|alpha_num|min:6',
         'cpassword' => 'required_without:user_id|same:password',   
         ];

@@ -57,10 +57,10 @@ class CategoryController extends Controller
 	 	$category->save();	
 	 	return $this->checkAjax($category,'Successfully edit',$request);	
 	}
-	public function deletcategory(Request $request,$category)
+	public function deletcategory(Request $request,$Comment)
 	{
-		$category->delete();
-		return $this->checkAjax($category,'Successfully delete',$request);	
+		$Comment->delete();
+		
 	}
 
 }

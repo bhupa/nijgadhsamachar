@@ -1,5 +1,5 @@
 
-@extends('user.master')
+@extends('try/index')
 @section('content')
 
 <div id="box">
@@ -12,8 +12,8 @@
             @endif
 
                   <div class="pull-right image">
-                  
-                  
+
+
 
                 </div>
                 </div>
@@ -30,51 +30,51 @@
             <tr>
                 <th colspan="1">Content</th>
                  <td><?php echo $key->body; ?></td>
-              
+
             </tr>
             <tr>
                 <th colspan="1">Image</th>
-              <td>  
+              <td>
              <img src="{{ $key->getImage() }}" class="img-circle" height="200" width="300"/>
               </td>
             </tr>
             <tr>
                 <th colspan="1">Create_by</th>
                  <td><?php echo $key->create_by; ?></td>
-              
+
             </tr>
             <tr>
                 <th colspan="1">By_admin</th>
                  <td><?php echo $key->by_admin; ?></td>
-              
+
             </tr>
             <tr>
                 <th colspan="1">edit_by</th>
                  <td><?php echo $key->edit_by; ?></td>
-              
+
             </tr>
              <tr>
                 <th colspan="1">Status</th>
                  <td><?php echo $key->status; ?></td>
-                
+
             </tr>
-           
+
          <tr>
                 <th colspan="1">Action</th>
                 <td ><a href="{{ url( 'User/editnews/'. $key->news_id) }}" ><button class="btn btn-xs btn-primary"> Edit </button></a>
                 <a class="deletenews" data-id="{{ $key->news_id }}" href="{{ url( 'User/deletenews/'. $key->news_id) }}" ><button class="btn btn-xs btn-primary"> Delete </button></a></td>
             </tr>
-    
+
               </table>
     @endforeach
      </div>
-     <script src="{{asset('resources/assets/js/jquery.js')}}"></script> 
+     <script src="{{asset('resources/assets/js/jquery.js')}}"></script>
       <script src="{{asset('resources/assets/js/jquery.validate.js')}}"></script>
-      <script src="{{asset('resources/assets/js/bootstrap.min.js')}}"></script> 
-  
+      <script src="{{asset('resources/assets/js/bootstrap.min.js')}}"></script>
+
     <script type="text/javascript">
-    
-        jQuery(document).ready(function(){ 
+
+        jQuery(document).ready(function(){
 
       $(document).on('click','.deletenews', function(e){
         e.preventDefault();

@@ -28,9 +28,9 @@ class AuthController extends Controller
      *
      * @var string
      */
-    
+
 protected $redirectTo = 'User/index';
-protected $redirectAfterLogout = 'User/index';
+protected $redirectAfterLogout = '/';
 
 protected $email = 'email';
 protected $password = 'password';
@@ -77,18 +77,18 @@ protected $password = 'password';
     }
     protected function authenticated($user)
     {
-        
     if ( (\Auth::user()->by_admin != 1) && (\Auth::user()->status !=="Active") )
       {
           return $this->logout()->withFlashMessage('Register but do not have permission for login');
-
       }
-
       else
       {
-        return \Redirect::to('User/index')
-            ->withFlashMessage('login sucesfully');
+            if(\Session::has('reffer'))
+            {
+                return redirect()->to(\Session::get('reffer'));
+            }
 
+            return redirect()->to('User/index');
       }
      }
 }

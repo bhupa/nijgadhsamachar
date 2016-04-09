@@ -16,9 +16,9 @@ class CreateTableComment extends Migration
             $table->increments('comment_id');
             $table->text('content');
             $table->integer('user_id')->unsigned();
-            $table->foreign('user_id')->references('user_id')->on('users');
+            $table->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade');
             $table->integer('news_id')->unsigned();
-            $table->foreign('news_id')->references('news_id')->on('news');
+            $table->foreign('news_id')->references('news_id')->on('news')->onDelete('cascade');
             $table->rememberToken();
             $table->timestamps();
         });

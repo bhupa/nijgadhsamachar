@@ -1,4 +1,4 @@
-@extends('user.master')
+@extends('try/index')
 
  @section('content')
              @include('tinymce::tpl')
@@ -10,11 +10,11 @@
               </div>
             @endif
         <form method="POST" id="editnews"
-              action="{{ URL::to('User/usersavenews/'.$news->news_id) }}" 
+              action="{{ URL::to('User/usersavenews/'.$news->news_id) }}"
               enctype="multipart/form-data" accept="image/gif,image/jpeg">
-           
+
             <input type="hidden" name="_token" value="{!! csrf_token() !!}">
-    
+
               <div class="form-group">
               <label for="firstname">Title</label>
               <input name="title"class="form-control" type="text" id="firstname" value="{{$news->title}}">
@@ -31,7 +31,7 @@
               <label for="image">Images</label>
               <input type="file" name="image" id="image"  >
               <img src="{{ $news->getImage() }}" height="50" width="50">
-            
+
             </div>
 
 
@@ -39,30 +39,30 @@
     </form>
   </div>
   </div>
-      <script src="{{asset('resources/assets/js/jquery.js')}}"></script> 
+      <script src="{{asset('resources/assets/js/jquery.js')}}"></script>
       <script src="{{asset('resources/assets/js/jquery.validate.js')}}"></script>
-      <script src="{{asset('resources/assets/js/bootstrap.min.js')}}"></script> 
-  
+      <script src="{{asset('resources/assets/js/bootstrap.min.js')}}"></script>
+
     <script type="text/javascript">
-    
-        jQuery(document).ready(function(){  
-        
+
+        jQuery(document).ready(function(){
+
 
                       $("#editnews").validate({
                                      rules:{title:{  required: true } },
                                       messages: {title:{
                                      required: "News title field is required"}
        }
-                                
+
                                      submitHandler: function(form,event){  event.preventDefault()}
                         });
 
 
 // $('#adduser').on('submit',function(e){
-        
-       
+
+
 //   $(document).on('submit','#adduser',function(e){
-     
+
 //       e.preventDefault();
 
 //        var formData = new FormData($(this)[0]);

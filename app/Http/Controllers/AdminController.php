@@ -12,13 +12,13 @@ use App\User;
 use App\News;
 use App\category;
 use App\Http\Requests\NewsRequest;
-use App\Http\Controllers\Controller;
+$;
 
 class AdminController extends Controller
 {
     public function viewuser($user)
     {
-return view('adminpages/userlist')->withUser($user->orderBy('firstname')->paginate(10));
+          return view('adminpages/userlist')->withUser($user->load('categories')->orderBy('user_id')->paginate(10));
     }
     public function approved($user)
     {
@@ -57,9 +57,9 @@ return view('adminpages/userlist')->withUser($user->orderBy('firstname')->pagina
         echo json_encode($data);
     else
         return Redirect::to('admin/viewprofile')->withFlashMessage();
-    
+
     }
-    
+
      public function storereporter(CreateUserRequest  $request)
     {
 
@@ -67,7 +67,7 @@ return view('adminpages/userlist')->withUser($user->orderBy('firstname')->pagina
        $user = User::findOrFail($request->get('user_id'));
 
         $user->firstname = $request->get('firstname');
-    	
+
 		if($request->file('image'))
 		{
 			$file = $request->file('image');
@@ -75,13 +75,13 @@ return view('adminpages/userlist')->withUser($user->orderBy('firstname')->pagina
 	        $user->image = $imageName;
 		}
 		 $user->update($request->all());
-		
+
 		return Redirect::to('admin/viewuser/'.\Auth::user()->user_id)
  			->withFlashMessage('sucessfully Edit Reporter ');
     }
-    public function saveImage($file){	
+    public function saveImage($file){
 
-	
+
 		$destinationPath =  public_path().'\images';
 
 		$fileimgname = 'fileimg' . str_random(12);
@@ -104,7 +104,7 @@ return view('adminpages/userlist')->withUser($user->orderBy('firstname')->pagina
     }
      public function viewnews()
     {
-        
+
      $news = \Auth::user()->news()->orderBy('news.created_at','desc')->paginate(10);
      return  view ('adminpages/newslist')->withNews($news);
 
@@ -130,17 +130,17 @@ return view('adminpages/userlist')->withUser($user->orderBy('firstname')->pagina
        $news->status = 1;
        $news-> save();
 
-       
+
      return  Redirect::to('admin/addnews')->withFlashMessage('news added sucessfully');
     }
-    
+
     public function checkword($content)
     {
 
      $word =['fuck','pussy','mother fucker','lado','wankers'];
      foreach($word as $k=>$v)
         $word[$k] = preg_quote($v, '/');
-    
+
     $word=implode('|',$word);
 
      $string =preg_replace_callback('/\b('. $word .')\b/i',function($m)
@@ -151,8 +151,8 @@ return view('adminpages/userlist')->withUser($user->orderBy('firstname')->pagina
 
         return $string;
     }
-        public function savenewsImage($file){   
-    
+        public function savenewsImage($file){
+
         $destinationPath =  public_path().'\news';
 
         $fileimgname = 'fileimg' . str_random(12);
@@ -181,9 +181,9 @@ public function viewprofile($user)
         if($request->file('image')){
             $file = $request->file('image');
             $imageName = $this->saveImage($file);
-            
+
             $user->image = $imageName;
-            
+
         }
 
         $user->save();

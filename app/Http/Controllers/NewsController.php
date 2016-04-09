@@ -18,36 +18,52 @@ class NewsController extends Controller
 {
     public function addnews ()
     {
-       
-         $category = category::select("category_id","category_name")->get();
-		return view('newpages/addnews')->with('category',$category);
-		
+        $category = category::all();
+		    return view('newpages/addnews')->with('category',$category);
     }
-    public function usernewslist ()
-    {  
+
+    public function usernewslist()
+    {
          $news = \Auth::user()->news->load('category');
 		return view('newpages/newslist')->with('news',$news);
-		
+
     }
+
+    public function approveNews($news)
+    {
+      $news->status = 1;
+      $news->save();
+      return redirect()->back()->withFlashMessage('sucessfully approved');;
+    }
+
+    public function catnewslist()
+    {
+        $assignedCat = \Auth::user()->categories;
+        $catnews = $assignedCat->load(['news'=>function($q){
+          $q->latest();
+        }]);
+        return view('newpages/newscatlist')->withCats($assignedCat);
+    }
+
     public function editnews ($news)
-    {  
-    $category = category::select("category_id","category_name")->get();
-	 return view('newpages/editnews')->with('news',$news)->with('category',$category);	
+    {
+      $category = category::all();
+	     return view('newpages/editnews')->with('news',$news)->with('category',$category);
     }
     public function deletenews(Request $request, $news)
-    {  
+    {
 
     $news->delete();
     return $this->checkAjax( ['status'=>1],'Successfully delete',$request);
 	  return Redirect::to('User/usernewslist')
- 			->withFlashMessage('sucessfully delete');	
+ 			->withFlashMessage('sucessfully delete');
     }
 
      public function checkAjax( $data, $message , $request)
  	{
     if($request->ajax())
     echo json_encode($data);
-    else 
+    else
 	return Redirect::to('User/addnews')->withFlashMessage($message);
 	}
     public function usernews(NewsRequest $request)
@@ -58,11 +74,33 @@ class NewsController extends Controller
         $imageName = $this->saveImage($file);
 		$news = new News;
 		$news = $news->fill($request->all());
-		$news->body = $this->checkword($request->get('body'));
+    $news->status = 0;
+
+    if(\Auth::user()->isAssignedCat(category::find($request->get('category_type'))))
+    {
+      $news->status = 1;
+    }
+    else
+    {
+        $categoryId = $request->get('category_type');
+
+        $category = category::find($categoryId);
+
+        $usersToNotify = $category->assignedUsers;
+
+        foreach( $usersToNotify as $nUser )
+        {
+          \Mail::send('email.notifyAddedNews',['category'=>$category, 'user'=>$nUser, 'news'=>$news, 'auth_user'=> \Auth::user() ],function($m)use($nUser){
+            $m->to($nUser->email);
+            $m->from('infor@email.com')->subject('A News has been added');
+          });
+        }
+    }
+
+    $news->body = $this->checkword($request->get('body'));
 		$news->image = $imageName;
         $news->create_by = $user;
         $news->by_admin = 0;
-        $news->status = 0;
 		$news->save();
 		return $this->checkAjax( $news,'Successfully Added',$request);
 
@@ -78,14 +116,15 @@ class NewsController extends Controller
         	$imageName = $this->saveImage($file);
 			$news->image = $imageName;
 		}
+
         $news->edit_by = $user;
         $news->save();
         return Redirect::to('User/usernewslist')
  			->withFlashMessage('sucessfully edit');
      }
 
-     public function saveImage($file){	
-	
+     public function saveImage($file){
+
 
 		$destinationPath =  public_path().'\news';
 
@@ -99,11 +138,11 @@ class NewsController extends Controller
 
 		return $destinationFilename;
 	}
-	
+
 	public function checkword($content)
 	{
 		$words = ['fuck', 'pussy', 'mother fucker','lado','wanker'];
-		
+
 		foreach($words as $k=>$v)
 			$words[ $k ]  = preg_quote($v,'/');
 

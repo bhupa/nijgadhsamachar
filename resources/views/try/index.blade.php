@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <meta name="description" content="">
   <meta name="author" content="">
-  <link rel="shortcut icon" href="images/favicon.png" type="image/png">
+  <link rel="shortcut icon" href="{{asset('images/favicon.png')}}" type="image/png">
 
   <title>@yield('title','userindex')</title>
 
@@ -85,11 +85,12 @@
                             @endif
 
                             @if(!Auth::user()->isAdmin())
-                            <li class="nav-parent"><a href="#"><i class="fa fa-edit"></i> <span>News</span></a></li>
+                            <li class="nav-parent"><a href="#"><i class="fa fa-edit"></i> <span>News</span></a>
                         <ul class="children">
                          <li><a href="{{ url('User/addnews') }}"><i class="fa fa-caret-right"></i> Add News</a></li>
                          <li><a href="{{ url('User/usernewslist') }}"><i class="fa fa-caret-right"></i> View News</a></li>
-                                </ul>
+                         <li><a href="{{ url('User/catnewslist') }}"><i class="fa fa-caret-right"></i>Assigned Category News</a></li>
+                                </ul></li>
                                 <li><a href="{{ url('User/viewprofile/'. Auth::user()->user_id) }}">view_Profile</a></li>
                             @endif
 

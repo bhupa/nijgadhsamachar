@@ -1,4 +1,4 @@
-@extends('user.master')
+@extends('try/index')
 
  @section('content')
              @include('tinymce::tpl')
@@ -10,11 +10,11 @@
               </div>
             @endif
         <form method="POST" id ="addnews"
-              action="{{ URL::to('User/usernews') }}" 
+              action="{{ URL::to('User/usernews') }}"
               enctype="multipart/form-data" accept="image/gif,image/jpeg">
-           
+
             <input type="hidden" name="_token" value="{!! csrf_token() !!}">
-    
+
               <div class="form-group">
               <label for="firstname">Title</label>
               <input name="title"class="form-control" type="text" id ="firstname">
@@ -39,14 +39,14 @@
     </form>
   </div>
   </div>
-      <script src="{{asset('resources/assets/js/jquery.js')}}"></script> 
+      <script src="{{asset('resources/assets/js/jquery.js')}}"></script>
       <script src="{{asset('resources/assets/js/jquery.validate.js')}}"></script>
-      <script src="{{asset('resources/assets/js/bootstrap.min.js')}}"></script> 
-  
+      <script src="{{asset('resources/assets/js/bootstrap.min.js')}}"></script>
+
     <script type="text/javascript">
-    
-        jQuery(document).ready(function(){  
-        
+
+        #(document).ready(function(){
+
 
                       $("#addnews").validate({
                                      rules:
@@ -54,9 +54,9 @@
                                           title:{  required: true  },
                                           body:{ required: true },
                                           image:{ required: true }
-                                         
+
                                      },
-                                
+
                                      submitHandler: function(form,event){  event.preventDefault()}
                         });
                        $('#addnews').on('submit',function(){
@@ -64,7 +64,7 @@
                 var d = $(this).data();
                 if(!d.validator.valid()){return false; }
                 var form = $(this);
-                var url  = form.prop('action'); 
+                var url  = form.prop('action');
                  var formData = new FormData($(this)[0]);
                 formData.append('body', tinymce.get('tinymce').getContent())
                 console.log($('#tinymce').val());
@@ -75,14 +75,14 @@
                   data:formData,
                   cache: false,
                   contentType: false,
-                  processData: false,         
+                  processData: false,
                   success:function(res)
                   {
-                  
-                    if (res) 
+
+                    if (res)
                     {
                       notifier.successNotify(res)
-                       
+
                   }
                     else
                     {
@@ -92,7 +92,7 @@
 
                   error:function(res)
                   {
-                    
+
                       notifier.errorNotify(res)
                   }
 
@@ -102,18 +102,18 @@
 var notifier = {
 
             errorNotify : function(res){
-                   var error = res.responseJSON;  
+                   var error = res.responseJSON;
                    var modalData = {}
                    modalData.title = "Error !"
                    modalData.body = "<p style='color:red'>These are the follwing errors: ";
-                  
+
                  $.each(error,function(key, value){
-                  
+
                   modalData.body += "<p style='text-decoration:underline'>"+key+"</p>";
                    for(var i = 0; i < value.length; i++ ){
                       modalData.body +=  ( "<span>" + value[i] + "<span>" );
                    }
-                 }); 
+                 });
 
                    modalData.footer= "Please Make Sure Your input is correct";
                    init_modal(modalData);
