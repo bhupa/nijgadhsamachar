@@ -1,11 +1,22 @@
 @extends('newpages/newshome')
 @section('content')
-  <div>
-      <h3>Latest News</h3>
-<div class="separator"></div>
+<div class="container" style="min-height: 594px;">
+ <div class="row">
+    <div class="col-xs-12 col-md-8">
+       @if (Session::has('flash_message'))
+              <div class="alert alert-danger">
+                {{ Session::get('flash_message') }}
+              </div>
+       @endif
+<div class="panel panel-primary">
+          <h4 class="panel-heading">
+            Latest News
+          </h4>
+           
+<div class="panel-body">
       <div class="row">
         @foreach($latestNews as $news)
-            <div class="col-md-3 panel panel-default" style="border:1px solid #ccc;margin:0px">
+            <div class="col-md-4 panel panel-default" style="border:1px solid #ccc;margin:0px">
               <h4 class="panel-heading">{{ucfirst($news->title)}}</h4>
 
               <div class="panel-body">
@@ -48,8 +59,7 @@
 </div>
                 @endforeach
         </div>
-      </div>
-      <div class="divider"></div>
+         <div class="divider"></div>
       <br>
 <div class="row">
       @foreach($categoryNews as $category)
@@ -79,6 +89,14 @@
     </div>
       @endforeach
 </div>
+      </div>
+
+    
+    <div class="col-xs-6 col-md-4">
+      One of three columns
+    </div>
+  </div>
+</div€>
 @stop
 @section('script')
   <script>
@@ -94,20 +112,123 @@
                   footer:''
                 })
               @else
+
+                <?php
+                    Session::put('reffer', url(""));
+                ?>
+
                 init_modal({
                   title: "Please Login",
                   body: "<form class='login' method='POST' action='{{ url('auth/login') }}'>\
                    <input type='hidden' name='_token' id='_token' value='{{ csrf_token() }}'>\
                   <div><label for='email'>Email</label><input type='text' class='form-control' name='email'></div>\
+                  <div class='error-holder'></div>\
                   <div class='form-group'><label for='Password'>Password</label><input type='password' class='form-control' name='password'></div>\
+                  <div class='error-password'></div>\
                   <div><button class='btn btn-primary' type='submit'> Login</button>'</div>\
                   </form>",
-                  footer: "<a href='' class='btn btn-primary'>Forget Password</a>",
+                  footer: "<a href='' style='float:pull-left' class='btn btn-primary forget-password'>Forget Password</a><a href='{{ url('User/adduser')}}' class='btn btn-primary'>SingUp</a>",
                 })
               @endif;
 
+        });
+        // forget password 
+        $(document).on('click','.forget-password', function(e){
+          e.preventDefault();
+
+          $('.modal').modal('hide');
+
+          setTimeout(function(){
+            init_modal({
+              title: 'Forget Password',
+              body: '<form class="forget-password-form">Email<div class="form-group"><input type="email" class="form-control" name="email"></div><button type="submit" class="btn btn-default">Send Link</button></form>'
+            })
+          },500)
+
+        });
+        
+
+        $(document).on('submit','.forget-password-form',function(e){
+          e.preventDefault()
+          var email = $(this).find('[name="email"]').val()
+          var data = $(this).serialize();
+          if( isEmail( email ) )
+          {
+            $.ajax({
+              url : "{{url('password/email')}}",
+              data : (data + '&_token={{csrf_token()}}'),
+              type : 'post',
+              dataType : 'json',
+              accept : 'json',
+              success : function(res)
+              {
+
+                $('.modal').modal('hide')
+                   
+                   setTimeout(function(){
+                    init_modal({
+                      title: 'SuccessFully Complete Operation',
+                      body: 'Please check Your email'
+                    })
+                  },1000)
+
+                console.log(res)
+              }
+            })  
+          }
         })
-        // this function is for edit the comment 
+       
+        // server side login validation
+        $(document).on('submit','.login', function(e){
+          e.preventDefault();
+
+           var email = $(this).find('[name="email"]').val();
+           var password = $(this).find('[name="password"]').val();
+           var error = false
+           if(!isEmail(email))
+           {
+            error = true
+              $(this).find('.error-holder').html('<span style="color:Red;">Invalid email  [please insert abc@xxx.com]</span>');
+           }
+           if($.trim(password) == '' )
+           {
+            error = true
+            $(this).find('.error-holder').html('<span style="color:Red;">Please insert a password</span>');
+           }
+
+           if(error){
+            return false;
+           }
+
+           $('.error-holder').html("")
+          var data = $(this).serialize();
+          $.ajax({
+                url: "{{ url('ajax/login') }}",
+                type: 'POST',
+                data: data + '&_token={{csrf_token()}}',
+                dataType: 'json',
+                accept: 'json',
+                success: function (res) {
+           
+              $('.modal').modal('hide');
+              location.reload()
+             },
+             error:function(res)
+                  {
+                    
+                    $('.modal').modal('hide')
+                      setTimeout(function(){
+
+                        notifier.errorNotify(res) 
+                      },400) 
+
+                  }
+        });
+              });
+
+
+        });
+      // this function is for edit the comment 
         $(document).on('click','.editcomment',function(e){
 
           e.preventDefault()
@@ -183,13 +304,38 @@
                   location.reload()
                 }
               })
-          })
-    })
+          });
+  
     $(document).on('click','.toggle-comment',function(e){
       e.preventDefault();
       $(this).parent().next('ul').slideToggle(300);
     });
 
-    var d;
+    function isEmail(email) {
+  var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+  return regex.test(email);
+}
+
+var notifier =
+{
+errorNotify:function(res)
+{
+var error = res.responseJSON;
+var modalData = {};
+modalData.title = "Error !"
+modalData.body ="<p style='color:red'>These are the following error:";
+$.each(error, function(key, value)
+{
+modalData.body += "<p style='text-decoration:underline'>"+key+"</p>";
+for(var i = 0; i < value.length; i++)
+{
+  modalData.body +=("<span>" +value[i]+"<span>");
+}
+});
+modalData.footer="please make sure your input is correct";
+init_modal(modalData);
+}
+
+}
   </script>
 @stop

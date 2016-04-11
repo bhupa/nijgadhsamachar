@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 use \Illuminate\Http\Response;
+use Illuminate\Http\Request;
 use App\Users;
 use Validator;
 use App\Http\Controllers\Controller;
@@ -77,18 +78,41 @@ protected $password = 'password';
     }
     protected function authenticated($user)
     {
-    if ( (\Auth::user()->by_admin != 1) && (\Auth::user()->status !=="Active") )
+
+    if ( (\Auth::user()->by_admin == Null) or (\Auth::user()->status !== "Active") )
       {
+
           return $this->logout()->withFlashMessage('Register but do not have permission for login');
       }
       else
       {
             if(\Session::has('reffer'))
             {
-                return redirect()->to(\Session::get('reffer'));
+                $url = \Session::get('reffer');
+                \Session::forget('reffer');
+                return redirect()->to($url);
             }
 
             return redirect()->to('User/index');
       }
+     }
+
+     public function ajaxLogin(Request $request)
+     {
+        
+        if (\Auth::attempt(['email' => $request->get('email'), 'password' => $request->get('password')]))
+        {
+            if((\Auth::user()->by_admin == Null) or (\Auth::user()->status !== "Active"))
+            {
+                \Auth::logout();
+                return response()->json(['invalid' =>["Register but do not have permission for login"]],425);
+            }
+            else
+            {
+            return ['success' => true];
+            }
+        }
+
+        return response()->json(['invalid' => ["Password and email doesn't match"]],425);
      }
 }

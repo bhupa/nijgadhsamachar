@@ -12,7 +12,7 @@ use App\User;
 use App\News;
 use App\category;
 use App\Http\Requests\NewsRequest;
-$;
+
 
 class AdminController extends Controller
 {

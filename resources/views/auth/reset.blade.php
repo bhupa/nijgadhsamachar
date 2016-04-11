@@ -8,7 +8,11 @@ UserSignIn
                 {{ Session::get('flash_message') }}
               </div>
             @endif
-
+<?php 
+    $query = new App\User;
+    $query = $query->newQueryWithoutScopes();
+    $email = $query->from('password_resets')->where('token',$token)->first()->email;
+?>
 <section>
   
     <div class="signinpanel">
@@ -40,16 +44,17 @@ UserSignIn
             
             <div class="col-md-5">
                 
-              <form method="POST" action="{{ url('/auth/login') }}">
-                    <h4 class="nomargin">Sign In</h4>
-                    <p class="mt5 mb20">Login to access your account.</p>
+              <form method="POST" action="{{ url('password/reset/'.$token) }}">
+                    <h4 class="nomargin">Forget Password</h4>
+                    <p class="mt5 mb20">Please Make you password strong Example abc123@.com</p>
                 
-                    <input type="text" class="form-control uname" name="email" placeholder="Username" />
-                    <span style="color:red; font-size:15px;">{{ $errors->first('email') }}</span>
+                    
                     <input type="password" class="form-control pword" name="password" placeholder="Password" />
                     <span style="color:red; font-size:15px;">{{ $errors->first('password') }}</span></br>
-                    <a href="#"><small>Forgot Your Password?</small></a>
-                    <button class="btn btn-success btn-block">Sign In</button>
+                     <input type="password" class="form-control confpword" name="password_confirmation" placeholder="Confrim_Password" />
+                    <span style="color:red; font-size:15px;">{{ $errors->first('password_confirmation') }}</span></br>
+                    <input type="hidden" name="email" value="{{$email}}">
+                    <button type="submit" class="btn btn-success btn-block">Save</button>
                     
                 </form>
             </div><!-- col-sm-5 -->
@@ -68,9 +73,4 @@ UserSignIn
     </div><!-- signin -->
   
 </section>
-@stop
-@section('script')
-<script>
-    $(document).on('submit',)
-</script>
 @stop

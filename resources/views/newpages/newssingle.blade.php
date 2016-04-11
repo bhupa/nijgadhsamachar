@@ -47,6 +47,31 @@
           </div>
       <div class="divider"></div>
       <br>
+      <div class="row">
+     
+      <div class="panel panel-primary">
+          <div class="panel-body">
+            <div class="row">
+            @foreach($categorynews as $news)
+              <div class="col-md-4 panel panel-default">
+                  <h4 class="panel-heading">{{$news->title}}</h4>
+                  <div class="panel-body">
+                    <div class="">
+                        <img class="img-responsive" src="{{$news->getImage()}}">
+                    </div>
+                    <br>
+                    {!! str_limit($news->body) !!}
+
+                    <div><a href="{{url('news/'.$news->news_id)}}" class="btn btn-primary">Read More</a>
+                  </div>
+              </div>
+            </div>
+              @endforeach
+          </div>
+      </div>
+    </div>
+</div>
+      </div>
 @stop
 @section('script')
   <script>

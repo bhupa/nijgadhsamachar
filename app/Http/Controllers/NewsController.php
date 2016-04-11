@@ -159,4 +159,15 @@ class NewsController extends Controller
 
 		return $string;
 	}
+
+
+  public function search(Request $request)
+  {
+      if($request->has('query'))
+      {
+        $query = $request->get('query');
+        $news = News::where('title','LIKE',"%$query%")->get();
+        return $news;
+      }
+  }
 }

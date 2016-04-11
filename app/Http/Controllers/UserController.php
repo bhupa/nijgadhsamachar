@@ -30,9 +30,14 @@ class UserController extends Controller
 	}
 	public function login()
 	{
+		if(\Auth::check()){
+			return redirect()->to('/');
+		}
+
 		if($url = \URL::previous()){
 			\Session::put('reffer',$url);
 		}
+
 		return view('userpages/login');
 	}
 

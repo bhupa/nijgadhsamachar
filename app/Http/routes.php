@@ -27,30 +27,38 @@
 |
 */
 
+Route::bind('token', function($token){
+	$query = new App\User;
+	$query = $query->newQueryWithoutScopes();
+	if( $query->from('password_resets')->whereToken($token)->first() )
+	{
+		return $token;
+	}
+
+	\App::abort(404);
+});
+
 Route::group(['middleware' => ['web']], function () {
 
+	Route::controllers([
+		'password' => 'Auth\PasswordController',
+	]);
 
-	Route::get('/', function () {
-		$news = App\News::whereStatus(1)->latest()->with('category','comments.user')->take(8)->get();
+	Route::get('search','NewsController@search');
 
-		$categoryNews = App\category::has('news')->with(['news.comments.user' =>function($q){
-			$q->orderBy('created_at','desc')->where('status',1);
-		}])->get();
+	Route::post('password/reset/{token}','Auth\PasswordController@postReset');
 
-		return view('newpages/homepage')->with('latestNews',$news)->with('categoryNews',$categoryNews);
-	});
-// Route::group(['middleware' => ['web']], function () {
-// //
-//
-// 	Route::get('/', function () {
-//
-//
-// 		return view('main/');
-// 	});
+	Route::get('reset/password/{token}','Auth\PasswordController@resetPassword');
+
+	
+
 
 	Route::get('news/{News}',function($news){
 		$news = $news->load('comments.user');
-		return view('newpages/newssingle')->with('news',$news);
+		$categoryAllnews = $news->category->news;
+		$newsTitileList = $categoryAllnews->lists('title');
+		$categorynews = $categoryAllnews->take(6);
+		return view('newpages/newssingle')->with('news',$news)->with('categorynews',$categorynews);
 	});
 
 	Route::get('{Category}/news',function($category){
@@ -60,9 +68,24 @@ Route::group(['middleware' => ['web']], function () {
 		return view('categorynews.categorywithnews')->with('allNews',$allNews);
 	});
 
+	Route::get('/', function () {
+		$news = App\News::whereStatus(1)->latest()->with('category','comments.user')->take(6)->get();
+
+		$categoryNews = App\category::has('news')->with(['news.comments.user' =>function($q){
+			$q->orderBy('created_at','desc')->where('status',1);
+		}])->get();
+
+		$categoryNews->each(function($category){
+			$category->news = $category->news->take(6);
+		});
+
+		return view('newpages/homepage')->with('latestNews',$news)->with('categoryNews',$categoryNews);
+	});
+
   Route::get('User/login', 'UserController@login');
 	Route::get('user/index', 'Auth\AuthController@getLogin');
 	Route::post('auth/login', 'Auth\AuthController@postLogin');
+	Route::post('ajax/login', 'Auth\AuthController@ajaxLogin');
 	Route::get('User/index','UserController@index');
 	Route::get('User/adduser','UserController@adduser');
 	Route::post('User/storeuser','UserController@storeuser');
@@ -121,15 +144,16 @@ Route::group(['middleware' => ['web']], function () {
 
 							        });
 	     });
-Route::get('all/news',function(){
-						if( Auth::user() ){
-							$news = Auth::user()->news()->paginate(10);
-							return view('try.news-list')->with('news',$news);
-						}
-						else{
-							echo 'Lp';
-						}
-					});
+
+	Route::get('all/news',function(){
+		if( Auth::user() ){
+			$news = Auth::user()->news()->paginate(10);
+			return view('try.news-list')->with('news',$news);
+		}
+		else{
+			echo 'Lp';
+		}
+	});
 
 });
 
