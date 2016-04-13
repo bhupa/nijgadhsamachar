@@ -8,19 +8,20 @@
                 {{ Session::get('flash_message') }}
               </div>
        @endif
+      </div></div> 
 <div class="panel panel-primary">
           <h4 class="panel-heading">
             Latest News
           </h4>
            
 <div class="panel-body">
-      <div class="row">
+      <div class="row news-list">
         @foreach($latestNews as $news)
-            <div class="col-md-4 panel panel-default" style="border:1px solid #ccc;margin:0px">
+            <div class="col-md-3 a-news-list panel panel-default">
               <h4 class="panel-heading">{{ucfirst($news->title)}}</h4>
 
               <div class="panel-body">
-                  <img height="200" width="200" class="img-responsive" src="{{$news->getImage()}}">
+                  <img height="140" width="140" class="img-responsive" src="{{$news->getImage()}}">
               </div>
               <br>
               <span class="label label-success">{{ $news->category->category_name }}</span>
@@ -41,11 +42,10 @@
                       <li class="list-group-item">
                           <div class="row">
                               <div class="col-md-3 col-xs-3">
-                                <img class="img-responsive" src="{{$comment->user->getImage()}}">
+                                <img  class="img-responsive" src="{{$comment->user->getImage()}}">
                               </div>
                               <div class="col-md-9">
-
-                                 <span class="comment-text"> {{$comment->content}}</span>
+                               <span class="comment-text"> {{$comment->content}}</span>
                                   @if (Auth::check() && Auth::user()->user_id==$comment->user_id)
                                  
                                    <a style="padding-left: 15px;" herf="" data-comment-id='{{ $comment->comment_id }}' class="deletecomment pull-right"><i class="glyphicon glyphicon-remove-sign"></i></a>
@@ -56,25 +56,26 @@
                       </li>
                     @endforeach
                 </ul>
-</div>
+            </div>
                 @endforeach
         </div>
-         <div class="divider"></div>
+         <div class="divider" style="margin-bottom: 20px"></div>
+
       <br>
 <div class="row">
       @foreach($categoryNews as $category)
-      <div class="panel panel-primary">
+      <div class="panel panel-primary" style="margin-bottom: 20px">
           <h4 class="panel-heading">
             {{ $category->category_name }}
           </h4>
-          <div class="panel-body">
+          <div class="panel-body news-parent">
             <div class="row">
             @foreach($category->news as $news)
-              <div class="col-md-4 panel panel-default">
+              <div class="cat-news-list col-md-3 news-child panel panel-default">
                   <h4 class="panel-heading">{{$news->title}}</h4>
                   <div class="panel-body">
                     <div class="">
-                        <img class="img-responsive" src="{{$news->getImage()}}">
+                        <img height="140" width="140" class="img-responsive" src="{{$news->getImage()}}">
                     </div>
                     <br>
                     {!! str_limit($news->body) !!}
@@ -83,6 +84,7 @@
                   </div>
               </div>
             </div>
+
               @endforeach
           </div>
       </div>
@@ -96,12 +98,31 @@
       One of three columns
     </div>
   </div>
-</div€>
+</div>
 @stop
+
 @section('script')
   <script>
-    $(document).on('ready',function(){
-        $('.comment').on('click', function(e){
+    $(document).on('ready',function()
+    {
+
+        $('.news-list').masonry({
+          // options...
+          itemSelector: '.a-news-list',
+          columnWidth: 100
+        });
+
+        $('.news-parent').masonry({
+          // options...
+          itemSelector: '.news-child',
+          columnWidth: 300
+        });
+
+        $(document).scroll()
+
+        $(document).on('click','.comment', function(e)
+        {
+          console.log('Ok')
             e.preventDefault();
               @if(Auth::check())
               var newsId = $(this).attr('data-news-id')

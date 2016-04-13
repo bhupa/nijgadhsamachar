@@ -88,7 +88,12 @@
 
  
 <div class="container"></div>
+
+
+<div class="modal-container"></div>
+
 </body>
+
 
 
 
@@ -100,16 +105,15 @@
 <script src="{{asset('asset/js/toggles.min.js')}}"></script>
 <script src="{{asset('asset/js/jquery.cookies.js')}}"></script>
 
-{{-- <script src="{{asset('asset/js/flot/flot.min.js')}}"></script> --}}
-{{-- <script src="{{asset('asset/js/flot/flot.resize.min.js')}}"></script> --}}
 <script src="{{asset('asset/js/morris.min.js')}}"></script>
 <script src="{{asset('asset/js/raphael-2.1.0.min.js')}}"></script>
 
 <script src="{{asset('asset/js/jquery.datatables.min.js')}}"></script>
 <script src="{{asset('asset/js/chosen.jquery.min.js')}}"></script>
+<script src="{{asset('asset/js/masonry.pkgd.min.js')}}"></script>
 
 <script src="{{asset('asset/js/custom.js')}}"></script>
 <script src="{{asset('asset/js/jquery.validate.min.js')}}"></script>
-{{-- <script src="{{asset('asset/js/dashboard.js')}}"></script> --}}
+
 @yield('script')
 </html>
